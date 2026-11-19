@@ -19,11 +19,13 @@ pause() { if [ -t 0 ] && [ -t 1 ]; then echo; printf 'Press Return to close this
 trap pause EXIT
 die() { echo; echo "ERROR: $*"; echo "Nothing was changed."; exit 1; }
 game_running() {   # capture first, then skip this script and its own subshells
-  local p x
+  local p x pp
   p="$(pgrep -if 'ffxiv_dx11|ffxivboot|ffxivlauncher|XIV on Mac|FINAL FANTASY XIV' 2>/dev/null)"
   for x in $p; do
     [ "$x" = "$$" ] && continue
-    [ "$(ps -o ppid= -p "$x" 2>/dev/null | tr -d ' ')" = "$$" ] && continue
+    pp="$(ps -o ppid= -p "$x" 2>/dev/null | tr -d ' ')"
+    [ -z "$pp" ] && continue          # already gone (e.g. this script's own short-lived subshell)
+    [ "$pp" = "$$" ] && continue
     return 0
   done
   return 1

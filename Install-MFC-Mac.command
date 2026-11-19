@@ -34,11 +34,13 @@ mtime() { perl -e '@s = stat($ARGV[0]); print(($s[9] || 0), "\n")' "$1" 2>/dev/n
 fmtdate() { perl -e '@t = localtime($ARGV[0]); printf("%04d-%02d-%02d %02d:%02d\n", $t[5]+1900, $t[4]+1, $t[3], $t[2], $t[1])' "$1" 2>/dev/null || echo "$1"; }
 num() { case "$1" in ''|*[!0-9]*) echo 0 ;; *) echo "$1" ;; esac; }
 game_running() {   # capture first, then skip this script and its own subshells
-  local p x
+  local p x pp
   p="$(pgrep -if 'ffxiv_dx11|ffxivboot|ffxivlauncher|XIV on Mac|FINAL FANTASY XIV' 2>/dev/null)"
   for x in $p; do
     [ "$x" = "$$" ] && continue
-    [ "$(ps -o ppid= -p "$x" 2>/dev/null | tr -d ' ')" = "$$" ] && continue
+    pp="$(ps -o ppid= -p "$x" 2>/dev/null | tr -d ' ')"
+    [ -z "$pp" ] && continue          # already gone (e.g. this script's own short-lived subshell)
+    [ "$pp" = "$$" ] && continue
     return 0
   done
   return 1
@@ -91,13 +93,33 @@ if [ -z "$GAME" ]; then
   add_cand "$SE_BOTTLE"
   add_cand "$HOME/Documents/My Games/FINAL FANTASY XIV - A Realm Reborn"
   add_cand "$HOME/Library/Application Support/XIV on Mac/ffxivConfig"
+  add_cand "$HOME/.xlcore/ffxivConfig"                       # XIVLauncher on Linux / Steam Deck
+  # Steam: every Steam library (Steam's own list, incl. libraries on other drives)
+  STEAM_LIBS=""
+  for sroot in "$HOME/Library/Application Support/Steam" "$HOME/.local/share/Steam" "$HOME/.steam/steam" \
+               "$HOME/.var/app/com.valvesoftware.Steam/.local/share/Steam"; do
+    [ -d "$sroot/steamapps" ] || continue
+    STEAM_LIBS="$STEAM_LIBS$sroot$NL"
+    vdf="$sroot/steamapps/libraryfolders.vdf"
+    [ -f "$vdf" ] && STEAM_LIBS="$STEAM_LIBS$(sed -n 's/^[[:space:]]*"path"[[:space:]]*"\(.*\)"[[:space:]]*$/\1/p' "$vdf")$NL"
+  done
+  SEARCH_ROOTS="$HOME/Library/Application Support/FINAL FANTASY XIV ONLINE$NL$HOME/Library/Application Support/XIV on Mac$NL$HOME/Documents/My Games$NL"
+  while IFS= read -r lib; do
+    [ -n "$lib" ] && [ -d "$lib/steamapps" ] || continue
+    # Steam Deck / Linux (Proton): FFXIV is Steam app 39210
+    add_cand "$lib/steamapps/compatdata/39210/pfx/drive_c/users/steamuser/Documents/My Games/FINAL FANTASY XIV - A Realm Reborn"
+    [ -d "$lib/steamapps/compatdata/39210" ] && SEARCH_ROOTS="$SEARCH_ROOTS$lib/steamapps/compatdata/39210$NL"
+    # Mac Steam edition: search only the FFXIV game folders in this library
+    for g in "$lib/steamapps/common/"*FINAL\ FANTASY\ XIV*; do [ -d "$g" ] && SEARCH_ROOTS="$SEARCH_ROOTS$g$NL"; done
+  done <<EOF
+$STEAM_LIBS
+EOF
   # search only the game's own folders (never all of Library/Documents: that triggers macOS privacy prompts)
-  for root in "$HOME/Library/Application Support/FINAL FANTASY XIV ONLINE" \
-              "$HOME/Library/Application Support/XIV on Mac" \
-              "$HOME/Documents/My Games"; do
-    [ -d "$root" ] || continue
-    # no -L: Wine prefixes contain links to the whole disk (dosdevices/z:) and to your home folders
-    FOUND="$(find "$root" -maxdepth 12 \( -name dosdevices -o -name 'MFC Backup *' -o -name sqpack -o -name game \) -prune \
+  ROOTS_LIST="$(printf '%s' "$SEARCH_ROOTS" | awk 'NF && !seen[$0]++')"
+  while IFS= read -r root; do
+    [ -n "$root" ] && [ -d "$root" ] || continue
+    # -H follows only the root itself if it is a link; no -L: Wine prefixes link to the whole disk (dosdevices/z:)
+    FOUND="$(find -H "$root" -maxdepth 16 \( -name dosdevices -o -name 'MFC Backup *' -o -name sqpack -o -name game \) -prune \
              -o -name FFXIV.cfg -type f -print 2>/dev/null)"
     while IFS= read -r cfg; do
       [ -n "$cfg" ] || continue
@@ -106,7 +128,9 @@ if [ -z "$GAME" ]; then
     done <<EOF
 $FOUND
 EOF
-  done
+  done <<EOF
+$ROOTS_LIST
+EOF
   [ -n "$CANDS" ] || die "Couldn't find your FFXIV settings folder. Start the game once and log in to a character, or run with --path \"<folder that contains FFXIV.cfg>\"."
   N=$(printf '%s' "$CANDS" | awk 'NF' | wc -l | tr -d ' ')
   if [ "$N" -eq 1 ]; then

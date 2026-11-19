@@ -166,6 +166,8 @@ The installer makes a backup for you automatically (see below). For a backup of 
 ## Installation (PC) <sup>[⮝][index]</sup>
 
 #### With the installer (recommended) <sup>[⮝][index]</sup>
+Works the same for the **Square Enix standalone version and the Steam version**: on Windows both keep their settings in `Documents\My Games\FINAL FANTASY XIV - A Realm Reborn` (also when Documents is in OneDrive), and that's where the installer looks.
+
 1. Log in to the character you want MFC on (so it shows first in the list), then **close the game completely**, launcher included. The installer stops if FFXIV or its launcher is running.
 2. Download MFC (on the GitHub page: **Code -> Download ZIP**), right-click the zip -> **Extract All**, and open the extracted folder. Don't run the installer from inside the zip.
 3. Double-click **`Install-MFC.bat`**.
@@ -195,7 +197,7 @@ New character later? Log in to it once, close the game, and run the installer ag
 4. It first saves your **current** state as `MFC Backup <date time> (pre-restore)`, so a restore can itself be undone. Then it puts the backed-up FFXIV.cfg and character files back. It also removes MFC files the installer added to a folder where they did not exist before, and nothing else.
 
 #### Manual Installation (PC) <sup>[⮝][index]</sup>
-For Steam Deck, Linux, or if you prefer doing it by hand. (Mac has its own installer, see [Installation (Mac)](#installation-mac-).)
+If you prefer doing it by hand. (Mac, Steam Deck and Linux can use the shell installer instead, see [Installation (Mac)](#installation-mac-) and [Steam Deck / Linux](#steam-deck--linux).)
 
 1. Make sure the game is not running!
 2. [Backup](#backup-) your current config. Installing overwrites almost everything in your character settings.
@@ -213,9 +215,10 @@ For Steam Deck, Linux, or if you prefer doing it by hand. (Mac has its own insta
 *Image: Fr4nsson (FFC). It shows FFC's zip, but the steps are the same, minus the ADDON renaming.*
 
 ## Installation (Mac) <sup>[⮝][index]</sup>
-Works with **Square Enix's Mac client** and with **XIV on Mac**. The installer looks in all the usual places:
+Works with **Square Enix's Mac client (standalone or Steam)** and with **XIV on Mac**. The installer looks in all the usual places:
 * Square Enix client: inside its app data, `~/Library/Application Support/FINAL FANTASY XIV ONLINE/Bottles/published_Final_Fantasy/drive_c/users/crossover/My Documents/My Games/FINAL FANTASY XIV - A Realm Reborn`, or `~/Documents/My Games/FINAL FANTASY XIV - A Realm Reborn`
 * XIV on Mac: `~/Library/Application Support/XIV on Mac/ffxivConfig`
+* Steam: the FFXIV folders inside **every Steam library** Steam knows about (including libraries on other drives, read from Steam's own `libraryfolders.vdf`). Where the Steam edition of the Mac client keeps its settings isn't documented anywhere we could find, so the installer searches for them there; if it can't find yours, run it from Terminal with `--path "<the folder that contains FFXIV.cfg>"` (and please report the location so it can be added).
 
 It only searches the game's own folders (so macOS won't pop up privacy prompts for your contacts or photos), and if it finds more than one settings folder it shows when each was last played and asks which one to use. It does the same things as the Windows installer: backup first, pick characters, and by default only MFC's UI size goes into your system settings. Before changing anything it shows exactly which characters it will overwrite and asks you to confirm.
 
@@ -235,7 +238,10 @@ If something can't be written (for example a read-only file), the installer stop
 
 **Undo:** quit the game and double-click **`Restore-MFC-Mac.command`** (same first-time permission step), pick a backup by number (the oldest one is your setup from before MFC), and confirm with `y`. It saves your current state as `(pre-restore)` first, so a restore can be undone too.
 
-*The Mac scripts were tested against copies of both folder layouts, not yet on every macOS version. If anything goes wrong, your backup folder has everything; please report it.*
+*The Mac scripts were tested against copies of these folder layouts (Square Enix client, XIV on Mac, a Steam library on another drive), not yet on every macOS version. If anything goes wrong, your backup folder has everything; please report it.*
+
+#### Steam Deck / Linux
+The same shell installer works here. Open a terminal (on Steam Deck: Desktop Mode -> Konsole) in the unzipped MFC folder and run `bash Install-MFC-Mac.command` (undo: `bash Restore-MFC-Mac.command`). It finds the Steam (Proton) settings folder for FFXIV (`steamapps/compatdata/39210/.../Documents/My Games/FINAL FANTASY XIV - A Realm Reborn`) in any Steam library, including Flatpak Steam, and XIVLauncher's `~/.xlcore/ffxivConfig`. Close the game first.
 
 ## Installation (Console) <sup>[⮝][index]</sup>
 Same method as FFC. You need at least the starter edition on PC (yes, even if you already own the game on console). Install on PC, then move the settings through the game's server backup.
@@ -348,7 +354,7 @@ MFC is a starting point, not a cage. Want Standard movement, your own chat tabs,
 - **Not tested in game on every job.** If something is wrong (a duplicate button, a missing action, a macro that does nothing), please report it.
 - **Blue Mage spells were not updated.** They depend on which spells you have loaded. Only the row swap was applied.
 - **One HUD file only**, laid out at 2560x1600. No separate 1080p/1440p/4K versions like FFC had. Small offsets can be fixed in HUD Layout (`CTRL + NUMPAD 0`).
-- **Installers for Windows and Mac only.** Steam Deck and Linux use the [Manual Installation](#manual-installation-pc-). The Mac installer was tested against copies of the Square Enix client and XIV on Mac folder layouts, not on every macOS version.
+- **Installers: Windows (`.bat`) and Mac / Steam Deck / Linux (`.command`, run with bash).** Both handle the standalone and Steam versions. The shell installer was tested against copies of the Square Enix client, XIV on Mac, Steam-library and Proton folder layouts, not on every macOS version or a real Steam Deck.
 - **Console**: install on PC first, then use the game's Back Up Client/Character Settings, see [Installation (Console)](#installation-console-).
 - **Job-change buttons switch gear by gearset name.** You need a gearset named exactly the English job name (for example `Viper`, `Pictomancer`, `Beastmaster`). Non-English clients: see the [FAQ](#frequently-asked-questions-faq-).
 - **White Mage**: Glare IV and Divine Caress may show up as duplicates of the buttons they upgrade from. Drag them off if so.

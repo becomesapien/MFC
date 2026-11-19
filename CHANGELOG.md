@@ -55,7 +55,7 @@ Tested against game data current as of November 2026 (Dawntrail 7.x). You can ch
   - New `Restore-MFC.bat`: puts any MFC backup back, and saves your current state first as `MFC Backup <date time> (pre-restore)` so a restore can be undone too.
   - Both refuse to run while the game or launcher is open. Restore was tested on a test game folder and comes back byte-identical.
   - New `Install-MFC-Mac.command` / `Restore-MFC-Mac.command` for macOS: same behaviour as the Windows ones, for both Square Enix's Mac client and XIV on Mac (finds the settings folder by itself). Tested against copies of both folder layouts; the UI-size merge is byte-exact.
-  - Steam Deck / Linux: manual installation only.
+  - Steam: both installers handle the Steam version (Windows: same Documents folder; Mac: searches every Steam library). Steam Deck / Linux can run `bash Install-MFC-Mac.command` (Proton app 39210, Flatpak Steam, XIVLauncher).
 
 • Megumax's personal settings (good to know):
   - Legacy movement is on (keyboard and gamepad), legacy flying controls on keyboard only, legacy autorun while flying in both.
