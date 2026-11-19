@@ -213,7 +213,11 @@ For Steam Deck, Linux, or if you prefer doing it by hand. (Mac has its own insta
 *Image: Fr4nsson (FFC). It shows FFC's zip, but the steps are the same, minus the ADDON renaming.*
 
 ## Installation (Mac) <sup>[⮝][index]</sup>
-Works with **Square Enix's Mac client** (settings in `~/Documents/My Games/FINAL FANTASY XIV - A Realm Reborn`) and with **XIV on Mac** (settings in `~/Library/Application Support/XIV on Mac/ffxivConfig`). The installer finds the right folder by itself, searches if you moved it, and asks if it finds more than one. It does the same things as the Windows installer: backup first, pick characters, and by default only MFC's UI size goes into your system settings.
+Works with **Square Enix's Mac client** and with **XIV on Mac**. The installer looks in all the usual places:
+* Square Enix client: inside its app data, `~/Library/Application Support/FINAL FANTASY XIV ONLINE/Bottles/published_Final_Fantasy/drive_c/users/crossover/My Documents/My Games/FINAL FANTASY XIV - A Realm Reborn`, or `~/Documents/My Games/FINAL FANTASY XIV - A Realm Reborn`
+* XIV on Mac: `~/Library/Application Support/XIV on Mac/ffxivConfig`
+
+It only searches the game's own folders (so macOS won't pop up privacy prompts for your contacts or photos), and if it finds more than one settings folder it shows when each was last played and asks which one to use. It does the same things as the Windows installer: backup first, pick characters, and by default only MFC's UI size goes into your system settings. Before changing anything it shows exactly which characters it will overwrite and asks you to confirm.
 
 1. Log in to the character you want MFC on (so it shows first in the list), then **quit the game completely** (`Cmd + Q`), including XIV on Mac. The installer stops if the game is running.
 2. Download MFC (**Code -> Download ZIP**) and double-click the zip to unzip it.
@@ -224,7 +228,10 @@ Works with **Square Enix's Mac client** (settings in `~/Documents/My Games/FINAL
    * On macOS 14 and older, right-click the file -> **Open** -> **Open** also works.
 4. **Choose your characters** by number (`1`, `1,3`) or `A` for all. Every character you pick gets MFC's hotbars, keybinds, macros, HUD, chat tabs and character settings in place of its own (saved in the backup).
 5. **System settings**: press Enter for `[1]` (only MFC's UI size, everything else stays yours). `[3]` replaces the whole FFXIV.cfg, but it was made on a Windows PC, so graphics/window settings may not suit a Mac.
-6. Done. :tada: The backup is saved as `MFC Backup <date time>` next to your settings folder.
+6. **Confirm**: it lists the character folders it will overwrite. Type `y` to go ahead (anything else cancels, nothing changed).
+7. Done. :tada: The backup is saved as `MFC Backup <date time>` next to your settings folder. If macOS asks whether Terminal may access your Documents folder, click **Allow** (that's where the game keeps its settings).
+
+If something can't be written (for example a read-only file), the installer stops **before** changing anything and tells you which file. If it ever stops halfway, it says so and tells you which backup to restore.
 
 **Undo:** quit the game and double-click **`Restore-MFC-Mac.command`** (same first-time permission step), pick a backup by number. It saves your current state as `(pre-restore)` first.
 
