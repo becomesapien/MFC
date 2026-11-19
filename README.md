@@ -233,7 +233,7 @@ It only searches the game's own folders (so macOS won't pop up privacy prompts f
 
 If something can't be written (for example a read-only file), the installer stops **before** changing anything and tells you which file. If it ever stops halfway, it says so and tells you which backup to restore.
 
-**Undo:** quit the game and double-click **`Restore-MFC-Mac.command`** (same first-time permission step), pick a backup by number. It saves your current state as `(pre-restore)` first.
+**Undo:** quit the game and double-click **`Restore-MFC-Mac.command`** (same first-time permission step), pick a backup by number (the oldest one is your setup from before MFC), and confirm with `y`. It saves your current state as `(pre-restore)` first, so a restore can be undone too.
 
 *The Mac scripts were tested against copies of both folder layouts, not yet on every macOS version. If anything goes wrong, your backup folder has everything; please report it.*
 

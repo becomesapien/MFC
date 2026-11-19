@@ -10,13 +10,15 @@
 #   macOS 15+: click Done, then System Settings > Privacy & Security > Open Anyway, and double-click again.
 #   macOS 14 and older: right-click > Open > Open.
 #   Any macOS: open Terminal, type "bash " (with a space), drag this file into the window, press Return.
-# Options: --path "<folder that contains FFXIV.cfg>"   --all   --system ask|keep|uionly|replace   --yes
+# Options: --path "<folder that contains FFXIV.cfg>"   --all   --system ask|keep|uionly|replace
+#          --yes   (skips only the final "Continue? [y/N]"; use --all too to skip the character prompt)
 [ -n "${BASH_VERSION:-}" ] || exec /bin/bash "$0" "$@"
 set -u
 TAB=$(printf '\t')
 NL='
 '
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
+unset CDPATH
+SCRIPT_DIR="$(cd -- "$(dirname "$0")" && pwd -P)"
 PAYLOAD="$SCRIPT_DIR/Manual Installation"
 CHARDATA="$PAYLOAD/CharacterData"
 UIKEYS="UiBaseScale UiHighScale UiSystemEnlarge UiAssetType"
@@ -31,7 +33,17 @@ fail() { echo; echo "ERROR: $*"; echo "Some files WERE changed. Quit the game, t
 mtime() { perl -e '@s = stat($ARGV[0]); print(($s[9] || 0), "\n")' "$1" 2>/dev/null || /usr/bin/stat -f %m "$1" 2>/dev/null || echo 0; }
 fmtdate() { perl -e '@t = localtime($ARGV[0]); printf("%04d-%02d-%02d %02d:%02d\n", $t[5]+1900, $t[4]+1, $t[3], $t[2], $t[1])' "$1" 2>/dev/null || echo "$1"; }
 num() { case "$1" in ''|*[!0-9]*) echo 0 ;; *) echo "$1" ;; esac; }
-game_running() { pgrep -if 'ffxiv_dx11|ffxivboot|ffxivlauncher|XIV on Mac|FINAL FANTASY XIV' 2>/dev/null | grep -vx "$$" | grep -q .; }
+game_running() {   # capture first, then skip this script and its own subshells
+  local p x
+  p="$(pgrep -if 'ffxiv_dx11|ffxivboot|ffxivlauncher|XIV on Mac|FINAL FANTASY XIV' 2>/dev/null)"
+  for x in $p; do
+    [ "$x" = "$$" ] && continue
+    [ "$(ps -o ppid= -p "$x" 2>/dev/null | tr -d ' ')" = "$$" ] && continue
+    return 0
+  done
+  return 1
+}
+valid_pick() { case "$1" in ''|0*|*[!0-9]*) return 1 ;; esac; [ ${#1} -le 4 ] && [ "$1" -le "$2" ]; }
 
 # ---- options (parsed before anything else, relative paths resolved against where you ran it) ----
 GAME=""; ALL=0; SYSMODE="ask"; YES=0
@@ -45,7 +57,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 case "$SYSMODE" in ask|keep|uionly|replace) ;; *) die "--system must be ask, keep, uionly or replace." ;; esac
-if [ -n "$GAME" ]; then GAME="$(cd "$GAME" 2>/dev/null && pwd -P)" || die "--path folder not found."; fi
+if [ -n "$GAME" ]; then GAME="$(cd -- "$GAME" 2>/dev/null && pwd -P)" || die "--path folder not found."; fi
 
 echo
 echo "=== Megumax's FFXIV Config (MFC) installer for Mac ==="
@@ -71,7 +83,7 @@ if [ -z "$GAME" ]; then
     local d="$1" real
     case "$d" in *"/MFC Backup "*) return ;; esac
     [ -f "$d/FFXIV.cfg" ] || return
-    real="$(cd "$d" 2>/dev/null && pwd -P)" || return
+    real="$(cd -- "$d" 2>/dev/null && pwd -P)" || return
     case "$NL$CANDS" in *"$NL$real$NL"*) return ;; esac
     CANDS="$CANDS$real$NL"
   }
@@ -84,7 +96,9 @@ if [ -z "$GAME" ]; then
               "$HOME/Library/Application Support/XIV on Mac" \
               "$HOME/Documents/My Games"; do
     [ -d "$root" ] || continue
-    FOUND="$(find -L "$root" -maxdepth 12 -name FFXIV.cfg -type f 2>/dev/null)"
+    # no -L: Wine prefixes contain links to the whole disk (dosdevices/z:) and to your home folders
+    FOUND="$(find "$root" -maxdepth 12 \( -name dosdevices -o -name 'MFC Backup *' -o -name sqpack -o -name game \) -prune \
+             -o -name FFXIV.cfg -type f -print 2>/dev/null)"
     while IFS= read -r cfg; do
       [ -n "$cfg" ] || continue
       d="$(dirname "$cfg")"
@@ -109,7 +123,7 @@ EOF
 $CANDS
 EOF
     printf "Which one does your game use? (number) "; read -r pick
-    case "$pick" in ''|*[!0-9]*) die "Invalid choice." ;; esac
+    valid_pick "$pick" "$N" || die "Invalid choice."
     GAME="$(printf '%s' "$CANDS" | awk 'NF' | sed -n "${pick}p")"
     [ -n "$GAME" ] || die "Invalid choice."
   fi
@@ -152,7 +166,7 @@ EOF
     *)
       for n in $(printf '%s' "$ans" | tr ',' ' '); do
         case "$n" in ''|*[!0-9]*) echo "  (ignoring '$n': use numbers like 1 or 1,3)"; continue ;; esac
-        if [ "$n" -lt 1 ] || [ "$n" -gt "$NCH" ]; then echo "  (ignoring '$n': no such character)"; continue; fi
+        valid_pick "$n" "$NCH" || { echo "  (ignoring '$n': no such character)"; continue; }
         name="$(printf '%s\n' "$LIST" | sed -n "${n}p" | cut -f2)"
         printf '%s\n' "$SELECTED" | grep -qxF "$name" || SELECTED="$SELECTED$name$NL"
       done ;;
@@ -180,9 +194,17 @@ NSEL=$(printf '%s\n' "$SELECTED" | wc -l | tr -d ' ')
 echo
 echo "About to install MFC into $NSEL character folder(s) in:"
 echo "  $GAME"
-printf '%s\n' "$SELECTED" | sed 's/^/    /'
+while IFS="$TAB" read -r t name; do
+  printf '%s\n' "$SELECTED" | grep -qxF "$name" && echo "    $name   (last played $(fmtdate "$t"))"
+done <<EOF
+$LIST
+EOF
 echo "Their hotbars, keybinds, macros, HUD, chat tabs and character settings will be replaced (a backup is made first)."
-echo "FFXIV.cfg: $SYSMODE"
+case "$SYSMODE" in
+  uionly)  echo "System settings (FFXIV.cfg): only the UI size will change." ;;
+  replace) echo "System settings (FFXIV.cfg): will be replaced with MFC's." ;;
+  *)       echo "System settings (FFXIV.cfg): unchanged." ;;
+esac
 if [ "$YES" -ne 1 ]; then
   printf "Continue? [y/N] "; read -r ok
   case "$ok" in y|Y|yes|YES) ;; *) die "Cancelled." ;; esac
@@ -191,6 +213,7 @@ fi
 # ---- pre-flight: everything we will write must be writable ----
 while IFS= read -r name; do
   [ -w "$GAME/$name" ] || die "Can't write to '$GAME/$name'."
+  [ -L "$GAME/$name" ] && echo "Note: $name is a link to another folder; the backup will contain a real copy of it."
   for f in "$CHARDATA"/*; do
     t="$GAME/$name/$(basename "$f")"
     [ ! -e "$t" ] || [ -w "$t" ] || die "'$t' is read-only. Make it writable (Finder > Get Info > Sharing & Permissions) and run this again."
@@ -211,7 +234,7 @@ done
 abort_backup() { rm -rf "$BACKUP"; die "$1"; }
 cp -p "$GAME/FFXIV.cfg" "$BACKUP/" || abort_backup "Backup of FFXIV.cfg failed."
 while IFS= read -r name; do
-  cp -Rp "$GAME/$name" "$BACKUP/$name" || abort_backup "Backup of $name failed."
+  cp -RpH "$GAME/$name" "$BACKUP/$name" || abort_backup "Backup of $name failed."   # -H: real copy even if the folder is a link
 done <<EOF
 $SELECTED
 EOF
@@ -240,18 +263,24 @@ case "$SYSMODE" in
   uionly)
     tmp="$(mktemp "${TMPDIR:-/tmp}/mfc-cfg.XXXXXX")" || fail "Couldn't create a temporary file."
     # byte-exact: only the UI-size values change; line endings and every other byte stay as they were
-    if MFC_KEYS="$UIKEYS" perl -e '
-        my ($src, $dst, $tmp) = @ARGV; my %want = map { $_ => 1 } split / /, $ENV{MFC_KEYS}; my %val;
-        open(my $s, "<", $src) or die "src"; binmode $s;
+    # perl exit: 0 = all UI keys updated, 3 = written but some keys were not in this FFXIV.cfg, other = error
+    MFC_KEYS="$UIKEYS" perl -e '
+        my ($src, $dst, $tmp) = @ARGV; my %want = map { $_ => 1 } split / /, $ENV{MFC_KEYS}; my (%val, %seen);
+        open(my $s, "<", $src) or exit 1; binmode $s;
         while (<$s>) { $val{$1} = $2 if /^(\w+)\t([^\r\n]*)/ && $want{$1} }
         close $s;
-        open(my $d, "<", $dst) or die "dst"; binmode $d; local $/; my $c = <$d>; close $d;
-        my $n = ($c =~ s/^(\w+)\t[^\r\n]*/exists $val{$1} ? "$1\t$val{$1}" : $&/mge);
-        my $hit = () = $c =~ /^(?:UiBaseScale|UiHighScale|UiSystemEnlarge|UiAssetType)\t/mg;
-        warn "MFC-WARN: only $hit of " . scalar(keys %val) . " UI settings were present in your FFXIV.cfg\n" if $hit < keys %val;
-        open(my $o, ">", $tmp) or die "tmp"; binmode $o; print $o $c; close $o or die "tmp";
-      ' "$PAYLOAD/FFXIV.cfg" "$CFG" "$tmp" && cat "$tmp" > "$CFG"; then
-      rm -f "$tmp"; echo "Applied MFC's UI size to FFXIV.cfg (everything else kept)"
+        open(my $d, "<", $dst) or exit 1; binmode $d; local $/; my $c = <$d>; close $d;
+        $c =~ s/^(\w+)\t[^\r\n]*/exists $val{$1} ? do { $seen{$1} = 1; "$1\t$val{$1}" } : $&/mge;
+        open(my $o, ">", $tmp) or exit 1; binmode $o; print $o $c; close $o or exit 1;
+        my $miss = grep { !$seen{$_} } keys %val;
+        exit($miss ? 3 : 0);
+      ' "$PAYLOAD/FFXIV.cfg" "$CFG" "$tmp"
+    rc=$?
+    if [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ]; then
+      cat "$tmp" > "$CFG" || { rm -f "$tmp"; fail "Couldn't write FFXIV.cfg (the character files were installed)."; }
+      rm -f "$tmp"
+      if [ "$rc" -eq 0 ]; then echo "Applied MFC's UI size to FFXIV.cfg (everything else kept)"
+      else echo "Applied MFC's UI size where possible, but some UI settings weren't in your FFXIV.cfg yet: set the UI size in System Configuration if the HUD looks off."; fi
     else
       rm -f "$tmp"; fail "Couldn't update FFXIV.cfg (the character files were installed)."
     fi ;;
