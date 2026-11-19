@@ -27,8 +27,7 @@ Like FFC, MFC is only the game's own settings files: no mod, no plugin, nothing 
 - **[Squintina][squintina]**: the original PvE controller layouts for combat jobs and crafters (gatherers excluded), credited in FFC 2.5.
 - **Megumax**: the Dawntrail update, new jobs, PvP rebuild, hotbar row swap and installer described below.
 
-**Permission status:** Fr4nsson's terms ask that modified versions of FFC are not uploaded elsewhere without his permission. This repository is **private**, and it will only go public if he says OK. If you are Fr4nsson and reading this: thank you, and the decision is entirely yours.
-<!-- TODO on publish: replace the paragraph above with "Published with Fr4nsson's permission (date)." -->
+**Permission status:** Fr4nsson's terms ask that modified versions of FFC aren't uploaded elsewhere without his permission. He has since stepped away from the game, and the FFC community has been sharing its own updated builds in his absence. MFC is shared in the same spirit, **without his explicit permission**. If Fr4nsson asks for it to be taken down, it will be (see the [note at the end](#a-note-to-fr4nsson)).
 
 MFC is an unofficial continuation. It is not an official FFC release and is not endorsed by Fr4nsson or affiliated with Square Enix.
 
@@ -527,6 +526,11 @@ L1 + R3
 Zoom In/Out
 L1 + Right Analog Stick (move it)
 ```
+
+---
+## A note to Fr4nsson
+
+FFC made this game so much nicer to play, and MFC only exists to keep it working for the people who still use it. All the credit for the design, the layouts and the custom menu is yours. If you'd rather this weren't public, or want anything changed or credited differently, just open an issue or reach out, and it will be taken down or changed right away, no questions asked.
 
 ---
 *MFC is an unofficial fan continuation of Fr4nsson's FFXIV Config. It is not an official FFC release and is not endorsed by Fr4nsson or affiliated with Square Enix. FINAL FANTASY XIV is a registered trademark of Square Enix Holdings Co., Ltd.*
