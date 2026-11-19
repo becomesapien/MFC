@@ -1,0 +1,8 @@
+# Game files are binary/exact: never let git touch line endings
+*.DAT binary
+*.dat binary
+*.cfg binary
+# Windows scripts keep CRLF
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+*.md text eol=lf
