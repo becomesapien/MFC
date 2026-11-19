@@ -24,13 +24,13 @@ MFC works out of the box, but a few things are personal and are left for you to 
 
 ## Before you start <sup>[⮝][index]</sup>
 
-The idea behind the layout is Fr4nsson's, so his pictures are still the best overview (images from [FFC](https://github.com/Fr4nsson/FFC), credit Fr4nsson):
+The idea behind the layout is Fr4nsson's ([FFC](https://github.com/Fr4nsson/FFC)). These MFC diagrams follow his infographics, updated for MFC:
 
-![General Idea](https://raw.githubusercontent.com/Fr4nsson/FFC/main/images/general-idea.png)
+![General Idea](docs/images/general-idea.png)
 
-![Main Hotbar](https://raw.githubusercontent.com/Fr4nsson/FFC/main/images/main-hotbar.png)
+![Main Hotbar](docs/images/main-hotbar.png)
 
-**One difference:** MFC swapped the plain row and the CTRL row on the three main 4x3 blocks. Every key still does the same thing as in FFC, but in-game each block now shows **plain on top, SHIFT in the middle, CTRL at the bottom**, while the picture above shows CTRL on top. The reason: temporary NPC, vehicle and duty actions always drop into hotbar 1 starting at slot 1, and now they land on plain `1`–`4` instead of `CTRL + 1`–`4`.
+**One difference from FFC:** MFC swapped the plain row and the CTRL row on the three main 4x3 blocks. Every key still does the same thing as in FFC, but in-game each block now shows **plain on top, SHIFT in the middle, CTRL at the bottom** (as in the picture above; FFC's pictures show CTRL on top). The reason: temporary NPC, vehicle and duty actions always drop into hotbar 1 starting at slot 1, and now they land on plain `1`–`4` instead of `CTRL + 1`–`4`.
 
 ## Your mounts (SHIFT+H / CTRL+H) <sup>[⮝][index]</sup>
 

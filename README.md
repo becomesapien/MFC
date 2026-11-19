@@ -6,9 +6,9 @@
 [terms-of-service]: https://support.na.square-enix.com/rule.php?id=5382&la=1 "Terms of service"
 [comprehensive-controller-guide]: https://docs.google.com/document/d/1q_i5_X01hecbCOZOIN_71zceuSjWSuaN-OJdU6ZPV6s "Comprehensive Controller Guide"
 
-[general-idea]: https://raw.githubusercontent.com/Fr4nsson/FFC/main/images/general-idea.png "General Idea (image by Fr4nsson)"
-[main-hotbar]: https://raw.githubusercontent.com/Fr4nsson/FFC/main/images/main-hotbar.png "Main Hotbar (image by Fr4nsson)"
-[install-picture]: https://raw.githubusercontent.com/Fr4nsson/FFC/main/images/installation.png "Installation (image by Fr4nsson)"
+[general-idea]: docs/images/general-idea.png "General Idea (MFC diagram, after Fr4nsson's FFC infographic)"
+[main-hotbar]: docs/images/main-hotbar.png "Main Hotbar (MFC diagram, after Fr4nsson's FFC infographic)"
+[install-picture]: docs/images/installation.png "Manual Installation (MFC diagram)"
 [install-console-char-screen]: https://raw.githubusercontent.com/Fr4nsson/FFC/main/images/installation_console_character_screen.png "Character Screen (image by Fr4nsson)"
 [custom-menu-gif]: https://raw.githubusercontent.com/Fr4nsson/FFC/main/images/custom-menu.gif "Custom Menu (image by Fr4nsson)"
 
@@ -31,7 +31,7 @@ Like FFC, MFC is only the game's own settings files: no mod, no plugin, nothing 
 
 MFC is an unofficial continuation. It is not an official FFC release and is not endorsed by Fr4nsson or affiliated with Square Enix.
 
-All images on this page are Fr4nsson's, linked from his FFC repository.
+The Main Hotbar, General Idea and Manual Installation diagrams are MFC's own, drawn after Fr4nsson's FFC infographics to match MFC's layout. The console screenshot and the custom-menu animation are Fr4nsson's, linked from his FFC repository.
 
 ## Index
 
@@ -147,14 +147,14 @@ My personal emotes, mounts and minions, gearset buttons (gearset numbers differ 
 ## Main Hotbar <sup>[⮝][index]</sup>
 ![main-hotbar][main-hotbar]
 
-*Image: Fr4nsson (FFC).* **In MFC the rows are in a different order on screen.** Fr4nsson's image shows each 4x3 block with the CTRL row on top. In MFC each block shows **plain on top, SHIFT in the middle, CTRL at the bottom**. The keys still do exactly the same thing. Only the row positions moved, so that temporary actions (mounts, vehicles, NPC duties) land on plain `1`-`4`.
+*MFC diagram, after Fr4nsson's FFC infographic.* **MFC shows the rows in a different order from FFC:** each 4x3 block has **plain on top, SHIFT in the middle, CTRL at the bottom** (FFC had CTRL on top). The keys still do exactly the same thing. Only the row positions moved, so that temporary actions (mounts, vehicles, NPC duties) land on plain `1`-`4`.
 
 This also means *System Configuration -> Keybind -> Hotbar* shows Hotbar 1-3 slots 1-4 bound to the plain keys. That is expected.
 
 ## General Idea <sup>[⮝][index]</sup>
 ![general-idea][general-idea]
 
-*Image: Fr4nsson (FFC).* The same ideas apply in MFC, and the new Dawntrail buttons follow them.
+*MFC diagram, after Fr4nsson's FFC infographic. The idea is his; the examples come from the actual MFC bars, and the new Dawntrail buttons follow the same rules.*
 
 ## Backup <sup>[⮝][index]</sup>
 The installer makes a backup for you automatically (see below). For a backup of your own:
@@ -216,7 +216,7 @@ If you prefer doing it by hand. (Mac, Steam Deck and Linux can use the shell ins
 
 ![Installation][install-picture]
 
-*Image: Fr4nsson (FFC). It shows FFC's zip, but the steps are the same, minus the ADDON renaming.*
+*MFC diagram. The installers do all of this for you, with a backup first.*
 
 ## Installation (Mac) <sup>[⮝][index]</sup>
 Works with **Square Enix's Mac client (standalone or Steam)** and with **XIV on Mac**. The installer looks in all the usual places:
