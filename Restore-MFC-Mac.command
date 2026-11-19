@@ -13,7 +13,7 @@ unset CDPATH
 NL='
 '
 MFCFILES="ADDON.DAT COMMON.DAT CONTROL0.DAT CONTROL1.DAT HOTBAR.DAT KEYBIND.DAT LOGFLTR.DAT MACRO.DAT"
-INDEX="$HOME/Library/Application Support/MFC/backups.txt"
+if [ "$(uname -s 2>/dev/null)" = Darwin ]; then INDEX="$HOME/Library/Application Support/MFC/backups.txt"; else INDEX="${XDG_DATA_HOME:-$HOME/.local/share}/MFC/backups.txt"; fi
 
 pause() { if [ -t 0 ] && [ -t 1 ]; then echo; printf 'Press Return to close this window...'; read -r _ || true; fi; }
 trap pause EXIT

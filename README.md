@@ -47,17 +47,21 @@ All images on this page are Fr4nsson's, linked from his FFC repository.
    2. [Undo / restore](#undo--restore-)
    3. [Manual Installation](#manual-installation-pc-)
 9. [Installation (Mac)](#installation-mac-)
-10. [Installation (Console)](#installation-console-)
-10. [What each file does](#what-each-file-does-)
-11. [Custom Menu](#custom-menu-)
+10. [Installation (Steam Deck / Linux)](#installation-steam-deck--linux-)
+    1. [Steam Deck](#steam-deck-)
+    2. [Linux (desktop)](#linux-desktop-)
+    3. [Undo / restore](#undo--restore-steam-deck-and-linux-)
+11. [Installation (Console)](#installation-console-)
+12. [What each file does](#what-each-file-does-)
+13. [Custom Menu](#custom-menu-)
     1. [non-pvp](#non-pvp-areas-)
     2. [pvp](#pvp-areas-wolves-den-pier-)
-12. [Hotbar layouts per job](docs/layouts/README.md)
-13. [Make it yours](#make-it-yours-)
-14. [Known limitations](#known-limitations-)
-15. [Frequently Asked Questions (FAQ)](#frequently-asked-questions-faq-)
-16. [Keybinds](#keybinds-)
-17. [Controller](#controller--comprehensive-controller-guide-)
+14. [Hotbar layouts per job](docs/layouts/README.md)
+15. [Make it yours](#make-it-yours-)
+16. [Known limitations](#known-limitations-)
+17. [Frequently Asked Questions (FAQ)](#frequently-asked-questions-faq-)
+18. [Keybinds](#keybinds-)
+19. [Controller](#controller--comprehensive-controller-guide-)
 
 ## About
 
@@ -197,7 +201,7 @@ New character later? Log in to it once, close the game, and run the installer ag
 4. It first saves your **current** state as `MFC Backup <date time> (pre-restore)`, so a restore can itself be undone. Then it puts the backed-up FFXIV.cfg and character files back. It also removes MFC files the installer added to a folder where they did not exist before, and nothing else.
 
 #### Manual Installation (PC) <sup>[⮝][index]</sup>
-If you prefer doing it by hand. (Mac, Steam Deck and Linux can use the shell installer instead, see [Installation (Mac)](#installation-mac-) and [Steam Deck / Linux](#steam-deck--linux).)
+If you prefer doing it by hand. (Mac, Steam Deck and Linux can use the shell installer instead, see [Installation (Mac)](#installation-mac-) and [Installation (Steam Deck / Linux)](#installation-steam-deck--linux-).)
 
 1. Make sure the game is not running!
 2. [Backup](#backup-) your current config. Installing overwrites almost everything in your character settings.
@@ -240,8 +244,62 @@ If something can't be written (for example a read-only file), the installer stop
 
 *The Mac scripts were tested against copies of these folder layouts (Square Enix client, XIV on Mac, a Steam library on another drive), not yet on every macOS version. If anything goes wrong, your backup folder has everything; please report it.*
 
-#### Steam Deck / Linux
-The same shell installer works here. Open a terminal (on Steam Deck: Desktop Mode -> Konsole) in the unzipped MFC folder and run `bash Install-MFC-Mac.command` (undo: `bash Restore-MFC-Mac.command`). It finds the Steam (Proton) settings folder for FFXIV (`steamapps/compatdata/39210/.../Documents/My Games/FINAL FANTASY XIV - A Realm Reborn`) in any Steam library, including Flatpak Steam, and XIVLauncher's `~/.xlcore/ffxivConfig`. Close the game first.
+## Installation (Steam Deck / Linux) <sup>[⮝][index]</sup>
+The Mac installer, `Install-MFC-Mac.command`, is a plain bash script, and it works on Steam Deck and Linux too. Don't let the "Mac" in the name confuse you. It does exactly the same as the other installers: **backup first**, you pick the characters, by default only MFC's UI size goes into your system settings, and it **asks you to confirm** before changing anything.
+
+It finds your FFXIV settings by itself in:
+* **Steam (Proton)**: FFXIV is Steam app `39210`, so its settings live in `steamapps/compatdata/39210/pfx/drive_c/users/steamuser/Documents/My Games/FINAL FANTASY XIV - A Realm Reborn`. The installer checks this in **every Steam library**, including an **SD card** or second drive. It reads the list of libraries from Steam's own `libraryfolders.vdf`, and it also works with **Flatpak Steam**.
+* **XIVLauncher**: `~/.xlcore/ffxivConfig`
+
+Before you start: log in to every character you want MFC on at least once, because the game only creates a character's settings folder after its first login. Log in to the one you care about **last**, so it's at the top of the list.
+
+#### Steam Deck <sup>[⮝][index]</sup>
+1. **Quit FFXIV completely** in Gaming Mode (Steam button -> the game -> **Exit game**). The installer stops if the game is still running.
+2. Switch to the desktop: press the **Steam button -> Power -> Switch to Desktop**.
+3. Open a web browser, go to this GitHub page, and click **Code -> Download ZIP**. If you don't have a browser, install Firefox from the **Discover** app first.
+4. Open **Dolphin** (the folder icon on the taskbar), go to **Downloads**, right-click `MFC-main.zip` and choose **Extract -> Extract archive here**.
+5. Open **Konsole** (the terminal) from the application menu (bottom-left icon -> System -> Konsole) and type:
+   ```bash
+   cd ~/Downloads/MFC-main
+   bash Install-MFC-Mac.command
+   ```
+   (If you extracted it somewhere else, change the `cd` line. You can also type `cd ` and drag the folder from Dolphin into Konsole.)
+6. Answer the questions. Type the number and press **Enter**:
+   * If it found more than one FFXIV settings folder, it shows when each was last played. Pick the one your game uses (normally the most recent).
+   * **Characters**: `1` (or `1,3`, or `A` for all). The game names character folders by ID, which is why logging in to your main character last puts it at `[1]`.
+   * **System settings**: just press **Enter** for `[1]` (only the UI size). `[3]` copies the full Windows system settings and is **not recommended** on a Steam Deck.
+   * **Confirm**: it lists exactly which character folders it will overwrite. Type `y` to go ahead. Anything else cancels, and nothing is changed.
+7. When it says **Done!**, close Konsole and double-click **Return to Gaming Mode** on the desktop.
+8. Start FFXIV. :tada: If the HUD looks off on the Steam Deck screen, open **HUD Layout** in game and drag things into place.
+
+#### Linux (desktop) <sup>[⮝][index]</sup>
+1. Close FFXIV and its launcher completely.
+2. Download MFC (**Code -> Download ZIP**) and extract it.
+3. Open a terminal in the extracted folder and run:
+   ```bash
+   bash Install-MFC-Mac.command
+   ```
+4. Answer the same questions as in the Steam Deck steps above (folder if asked, characters, system settings `[1]`, confirm with `y`).
+
+**Using Lutris, Bottles, Heroic or another Wine setup?** The installer doesn't search those automatically. Find the folder that contains `FFXIV.cfg` and the `FFXIV_CHR...` folders (inside your Wine prefix, under `drive_c/users/<name>/Documents/My Games/FINAL FANTASY XIV - A Realm Reborn`), then point the installer at it:
+```bash
+bash Install-MFC-Mac.command --path "/full/path/to/FINAL FANTASY XIV - A Realm Reborn"
+```
+
+#### Undo / restore (Steam Deck and Linux) <sup>[⮝][index]</sup>
+1. Close the game.
+2. In a terminal in the MFC folder run:
+   ```bash
+   bash Restore-MFC-Mac.command
+   ```
+3. Pick a backup by number. The oldest one is your setup from before MFC was first installed. Then confirm with `y`. Your current state is saved first as `MFC Backup <date time> (pre-restore)`, so a restore can be undone too.
+
+Backups are saved as `MFC Backup <date time>` folders **next to** your settings folder. On Steam that's inside `.../compatdata/39210/.../Documents/My Games/`. The installer also keeps a list of them in `~/.local/share/MFC/backups.txt` (on Mac: `~/Library/Application Support/MFC/backups.txt`), so Restore always finds them.
+
+**Good to know**
+* The installer needs `bash` and `perl`, which SteamOS and almost every Linux distribution already have. If `perl` is missing, it keeps your FFXIV.cfg exactly as it is and installs everything else.
+* Want an extra copy of your settings on Square Enix's servers? Use the game's own **Back Up Character Settings** on the character select screen (see [Console](#installation-console-) for how that works).
+* *Tested against copies of these folder layouts: Steam (Proton) in the main library, on an SD-card library, Flatpak Steam, and XIVLauncher. Not yet tested on a real Steam Deck. If something goes wrong, your backup has everything; please report it.*
 
 ## Installation (Console) <sup>[⮝][index]</sup>
 Same method as FFC. You need at least the starter edition on PC (yes, even if you already own the game on console). Install on PC, then move the settings through the game's server backup.

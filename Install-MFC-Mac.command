@@ -22,7 +22,7 @@ SCRIPT_DIR="$(cd -- "$(dirname "$0")" && pwd -P)"
 PAYLOAD="$SCRIPT_DIR/Manual Installation"
 CHARDATA="$PAYLOAD/CharacterData"
 UIKEYS="UiBaseScale UiHighScale UiSystemEnlarge UiAssetType"
-INDEX_DIR="$HOME/Library/Application Support/MFC"
+if [ "$(uname -s 2>/dev/null)" = Darwin ]; then INDEX_DIR="$HOME/Library/Application Support/MFC"; else INDEX_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/MFC"; fi
 BACKUP=""
 
 pause() { if [ -t 0 ] && [ -t 1 ]; then echo; printf 'Press Return to close this window...'; read -r _ || true; fi; }
