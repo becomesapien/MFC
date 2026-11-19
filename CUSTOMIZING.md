@@ -189,7 +189,7 @@ Handy for learning a new job, or for checking where a button went if you think s
 
 **Console:** install on PC first, then use the game's *Back Up Client Settings* / *Back Up Character Settings* upload (on PC) and download (on console), exactly as described in the [FFC README](https://github.com/Fr4nsson/FFC#installation-console-).
 
-**Mac / Steam Deck / Linux:** manual installation only (copy the files from `Manual Installation` yourself, with the game closed).
+**Mac:** use `Install-MFC-Mac.command` / `Restore-MFC-Mac.command` (see the README, Installation (Mac)). **Steam Deck / Linux:** manual installation only (copy the files from `Manual Installation` yourself, with the game closed).
 
 ## Megumax's personal settings you may want to change <sup>[⮝][index]</sup>
 

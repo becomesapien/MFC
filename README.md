@@ -46,7 +46,8 @@ All images on this page are Fr4nsson's, linked from his FFC repository.
    1. [With the installer](#with-the-installer-recommended-)
    2. [Undo / restore](#undo--restore-)
    3. [Manual Installation](#manual-installation-pc-)
-9. [Installation (Console)](#installation-console-)
+9. [Installation (Mac)](#installation-mac-)
+10. [Installation (Console)](#installation-console-)
 10. [What each file does](#what-each-file-does-)
 11. [Custom Menu](#custom-menu-)
     1. [non-pvp](#non-pvp-areas-)
@@ -194,7 +195,7 @@ New character later? Log in to it once, close the game, and run the installer ag
 4. It first saves your **current** state as `MFC Backup <date time> (pre-restore)`, so a restore can itself be undone. Then it puts the backed-up FFXIV.cfg and character files back. It also removes MFC files the installer added to a folder where they did not exist before, and nothing else.
 
 #### Manual Installation (PC) <sup>[⮝][index]</sup>
-For Mac, Steam Deck, Linux, or if you prefer doing it by hand.
+For Steam Deck, Linux, or if you prefer doing it by hand. (Mac has its own installer, see [Installation (Mac)](#installation-mac-).)
 
 1. Make sure the game is not running!
 2. [Backup](#backup-) your current config. Installing overwrites almost everything in your character settings.
@@ -210,6 +211,24 @@ For Mac, Steam Deck, Linux, or if you prefer doing it by hand.
 ![Installation][install-picture]
 
 *Image: Fr4nsson (FFC). It shows FFC's zip, but the steps are the same, minus the ADDON renaming.*
+
+## Installation (Mac) <sup>[⮝][index]</sup>
+Works with **Square Enix's Mac client** (settings in `~/Documents/My Games/FINAL FANTASY XIV - A Realm Reborn`) and with **XIV on Mac** (settings in `~/Library/Application Support/XIV on Mac/ffxivConfig`). The installer finds the right folder by itself, searches if you moved it, and asks if it finds more than one. It does the same things as the Windows installer: backup first, pick characters, and by default only MFC's UI size goes into your system settings.
+
+1. Log in to the character you want MFC on (so it shows first in the list), then **quit the game completely** (`Cmd + Q`), including XIV on Mac. The installer stops if the game is running.
+2. Download MFC (**Code -> Download ZIP**) and double-click the zip to unzip it.
+3. Double-click **`Install-MFC-Mac.command`**. It opens in Terminal.
+   * **The first time, macOS will block it** ("Apple could not verify..."), because it is a script downloaded from the internet. Either:
+     * open **System Settings -> Privacy & Security**, scroll down, click **Open Anyway** next to `Install-MFC-Mac.command`, and confirm; or
+     * skip the prompt entirely: open **Terminal** and run `bash ~/Downloads/MFC-main/Install-MFC-Mac.command` (change the path if you unzipped it somewhere else; you can also type `bash ` and drag the file into the Terminal window).
+   * On macOS 14 and older, right-click the file -> **Open** -> **Open** also works.
+4. **Choose your characters** by number (`1`, `1,3`) or `A` for all. Every character you pick gets MFC's hotbars, keybinds, macros, HUD, chat tabs and character settings in place of its own (saved in the backup).
+5. **System settings**: press Enter for `[1]` (only MFC's UI size, everything else stays yours). `[3]` replaces the whole FFXIV.cfg, but it was made on a Windows PC, so graphics/window settings may not suit a Mac.
+6. Done. :tada: The backup is saved as `MFC Backup <date time>` next to your settings folder.
+
+**Undo:** quit the game and double-click **`Restore-MFC-Mac.command`** (same first-time permission step), pick a backup by number. It saves your current state as `(pre-restore)` first.
+
+*The Mac scripts were tested against copies of both folder layouts, not yet on every macOS version. If anything goes wrong, your backup folder has everything; please report it.*
 
 ## Installation (Console) <sup>[⮝][index]</sup>
 Same method as FFC. You need at least the starter edition on PC (yes, even if you already own the game on console). Install on PC, then move the settings through the game's server backup.
@@ -322,7 +341,7 @@ MFC is a starting point, not a cage. Want Standard movement, your own chat tabs,
 - **Not tested in game on every job.** If something is wrong (a duplicate button, a missing action, a macro that does nothing), please report it.
 - **Blue Mage spells were not updated.** They depend on which spells you have loaded. Only the row swap was applied.
 - **One HUD file only**, laid out at 2560x1600. No separate 1080p/1440p/4K versions like FFC had. Small offsets can be fixed in HUD Layout (`CTRL + NUMPAD 0`).
-- **The installer is Windows only.** Mac, Steam Deck and Linux use the [Manual Installation](#manual-installation-pc-).
+- **Installers for Windows and Mac only.** Steam Deck and Linux use the [Manual Installation](#manual-installation-pc-). The Mac installer was tested against copies of the Square Enix client and XIV on Mac folder layouts, not on every macOS version.
 - **Console**: install on PC first, then use the game's Back Up Client/Character Settings, see [Installation (Console)](#installation-console-).
 - **Job-change buttons switch gear by gearset name.** You need a gearset named exactly the English job name (for example `Viper`, `Pictomancer`, `Beastmaster`). Non-English clients: see the [FAQ](#frequently-asked-questions-faq-).
 - **White Mage**: Glare IV and Divine Caress may show up as duplicates of the buttons they upgrade from. Drag them off if so.

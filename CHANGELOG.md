@@ -54,7 +54,8 @@ Tested against game data current as of November 2026 (Dawntrail 7.x). You can ch
   - New `Install-MFC.bat`: backs up `FFXIV.cfg` and every character folder it touches **before** changing anything (into an `MFC Backup <date time>` folder next to the game's settings folder), lets you choose which characters to install to, and asks what to do with `FFXIV.cfg`: [1] apply only MFC's UI size and UI resolution settings (default), [2] keep yours as it is, [3] replace it with MFC's full system settings.
   - New `Restore-MFC.bat`: puts any MFC backup back, and saves your current state first as `MFC Backup <date time> (pre-restore)` so a restore can be undone too.
   - Both refuse to run while the game or launcher is open. Restore was tested on a test game folder and comes back byte-identical.
-  - Mac / Steam Deck / Linux: manual installation only.
+  - New `Install-MFC-Mac.command` / `Restore-MFC-Mac.command` for macOS: same behaviour as the Windows ones, for both Square Enix's Mac client and XIV on Mac (finds the settings folder by itself). Tested against copies of both folder layouts; the UI-size merge is byte-exact.
+  - Steam Deck / Linux: manual installation only.
 
 • Megumax's personal settings (good to know):
   - Legacy movement is on (keyboard and gamepad), legacy flying controls on keyboard only, legacy autorun while flying in both.
