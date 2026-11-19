@@ -2,9 +2,9 @@
 
 MFC (Megumax's FFXIV Config) is a continuation of [Fr4nsson's FFXIV Config (FFC)](https://github.com/Fr4nsson/FFC) 2.5, updated for Dawntrail. All the hard work of the original layout, HUD and custom menu is Fr4nsson's; MFC just brings it up to date. PvE controller layouts for combat jobs and crafters were originally made by Squintina (credited in FFC 2.5, gatherers excluded). MFC is unofficial: it is not an official FFC release and is not endorsed by Fr4nsson or affiliated with Square Enix.
 
-## CHANGELOG MFC 1.0
+## CHANGELOG MFC 1.0 (patch 7.58)
 
-Tested against game data current as of November 2026 (Dawntrail 7.x). You can check your version in macro `#99` (`ALT + M`), it says *Version: MFC 1.0, based on Fr4nsson's FFC 2.5*.
+Built and checked against the **patch 7.58** game data (the latest as of November 2026). You can check your version in macro `#99` (`ALT + M`), it says *Version: MFC 1.0, based on Fr4nsson's FFC 2.5*.
 
 • Jobs (NON-PVP):
   - Every older combat job and its base class updated for Dawntrail (19 jobs), keyboard **and** controller, about 357 slot changes in total.

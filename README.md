@@ -13,7 +13,7 @@
 [custom-menu-gif]: https://raw.githubusercontent.com/Fr4nsson/FFC/main/images/custom-menu.gif "Custom Menu (image by Fr4nsson)"
 
 # Megumax's FFXIV Config (MFC)
-A continuation of [Fr4nsson's FFXIV Config (FFC)][ffc], updated for Dawntrail.
+A continuation of [Fr4nsson's FFXIV Config (FFC)][ffc], updated for Dawntrail **patch 7.58**.
 
 A complete config for FFXIV with a clean, informative HUD layout. Every combat job (including Viper, Pictomancer and Beastmaster), crafter and gatherer has its actions already placed on hotbars, for keyboard and controller, in PvE and (for combat jobs) PvP. Blue Mage is the exception, and Beastmaster has no PvP.
 
@@ -67,11 +67,11 @@ The Main Hotbar, General Idea and Manual Installation diagrams are MFC's own, dr
 
 Fr4nsson spent a very long time on FFC: a HUD that is easy to read, and keybinds that put the same kind of action on the same key on every job, so switching jobs feels natural. His idea was simple. He did the trial and error so you can just play the game.
 
-Then Dawntrail arrived. Abilities were removed, new ones were added, three new jobs came out, and PvP changed again. A config that no longer matches the game slowly falls apart. MFC is my attempt to keep FFC alive: the same philosophy and the same rules, updated for the current game (checked against game data current as of November 2026, Dawntrail 7.x).
+Then Dawntrail arrived. Abilities were removed, new ones were added, three new jobs came out, and PvP changed again. A config that no longer matches the game slowly falls apart. MFC is my attempt to keep FFC alive: the same philosophy and the same rules, updated for the current game (checked against the **patch 7.58** game data, the latest as of November 2026).
 
 If you enjoy setting up your own HUD and keybinds, this probably isn't for you (though see [Make it yours](#make-it-yours-)). If you would rather log in and play, welcome.
 
-Current version: **MFC 1.0**, based on Fr4nsson's FFC 2.5. Check macro `#99` in game (`ALT + M` -> Individual tab).
+Current version: **MFC 1.0**, for game **patch 7.58**, based on Fr4nsson's FFC 2.5. Check macro `#99` in game (`ALT + M` -> Individual tab).
 
 ## What's new compared to FFC 2.5 <sup>[⮝][index]</sup>
 
